@@ -5,9 +5,9 @@ const path = require('path');
 const fs = require('fs');
 
 exports.createUserByAdmin = async (req, res) => {
-  const { name, email, password, confirmPassword, phone } = req.body;
+  const { name, userName, email,  password, confirmPassword, phone } = req.body;
   if (password !== confirmPassword) return res.status(400).json({ error: 'Passwords do not match' });
-  const user = new User({ name, email, password, phone });
+  const user = new User({ name, userName, email, password, phone });
   await user.save();
   res.status(201).json({ message: 'User created by admin' });
 };
@@ -35,11 +35,12 @@ exports.deleteUser = async (req, res) => {
 exports.createAdminUser = async () => { 
   try {
     const existingAdmin = await User.findOne({
-      email: "admin@admin.test",
+      userName: "superadmin",
     });
     if (!existingAdmin) {
       const adminUser = new User({
         fullName: "SuperAdmin",
+        userName: "superadmin",
         email: "admin@admin.test",
         password: "123.123",
         role: "admin",
